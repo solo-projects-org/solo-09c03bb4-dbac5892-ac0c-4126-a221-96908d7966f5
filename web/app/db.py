@@ -49,6 +49,27 @@ CREATE TABLE IF NOT EXISTS runs (
 
 CREATE UNIQUE INDEX IF NOT EXISTS ux_runs_active
     ON runs (section, date) WHERE status = 'running';
+
+-- Frozen handover archives: one immutable CSV per published revision. The
+-- UNIQUE index makes "same version hashed twice" return the original archive
+-- across both web processes.
+CREATE TABLE IF NOT EXISTS handovers (
+    id          TEXT PRIMARY KEY,
+    section     TEXT NOT NULL,
+    date        TEXT NOT NULL,
+    revision    INTEGER NOT NULL,
+    run_id      INTEGER,
+    row_count   INTEGER NOT NULL,
+    sha256      TEXT NOT NULL,
+    size_bytes  INTEGER NOT NULL,
+    filename    TEXT NOT NULL UNIQUE,
+    created_at  TEXT NOT NULL,
+    created_by  TEXT NOT NULL,
+    published_at TEXT NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_handovers_version
+    ON handovers (section, date, revision);
 """
 
 

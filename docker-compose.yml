@@ -20,6 +20,8 @@ services:
       DB_PATH: /data/quality.db
       STATION_URL: http://station:8000
       WORKER_NAME: web1
+      # Demo-only fault-injection hooks used by demo/demo.py; remove in production.
+      HANDOVER_TEST_HOOKS: "1"
     ports:
       - "8011:8000"
     volumes:
@@ -39,6 +41,7 @@ services:
       DB_PATH: /data/quality.db
       STATION_URL: http://station:8000
       WORKER_NAME: web2
+      HANDOVER_TEST_HOOKS: "1"
     ports:
       - "8012:8000"
     volumes:
